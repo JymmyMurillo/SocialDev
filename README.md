@@ -106,6 +106,16 @@ cp .env.example .env
 
 # El archivo ya tiene valores por defecto que funcionan
 # No necesitas modificar nada para desarrollo local
+
+# Internamente las carpetas frontend y backend pueden tener otro archivo .env.example, debes copiarlo en su respectiva ubicacion.
+cd backend 
+cp .env.example .env
+
+# o
+
+cd frontend
+cp .env.example .env
+
 ```
 
 #### 3. Levantar los servicios con Docker
