@@ -8,8 +8,8 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { PrismaModule } from "./prisma/prisma.module";
 import { AuthModule } from "./auth/auth.module";
+import { PostsModule } from "./posts/posts.module";
 //import { UsersModule } from "./users/users.module";
-//import { PostsModule } from "./posts/posts.module";
 
 /**
  * AppModule - Módulo raíz de NestJS
@@ -22,8 +22,8 @@ import { AuthModule } from "./auth/auth.module";
 
     // Módulos de funcionalidad
     AuthModule,
+    PostsModule,
     // UsersModule,
-    // PostsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
