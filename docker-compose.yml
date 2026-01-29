@@ -1,0 +1,34 @@
+# Docker Compose - SocialDev
+# Este archivo orquesta todos los servicios del proyecto
+
+services:
+  # =====================================================
+  # PostgreSQL Database
+  # =====================================================
+  db:
+    image: postgres:15-alpine
+    container_name: socialdev-db
+    restart: unless-stopped
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: ${DB_USER:-socialdev}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-socialdev123}
+      POSTGRES_DB: ${DB_NAME:-socialdev_db}
+    volumes:
+      # Persiste los datos de la BD en tu computadora
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - socialdev-network
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U socialdev']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+
+networks:
+  socialdev-network:
+    driver: bridge

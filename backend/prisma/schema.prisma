@@ -1,0 +1,113 @@
+// =====================================================
+// Prisma Schema - SocialDev Database
+// =====================================================
+// Este archivo define la estructura de la base de datos
+// Documentación: https://pris.ly/d/prisma-schema
+
+// =====================================================
+// Generador de Prisma Client
+// =====================================================
+generator client {
+  provider = "prisma-client-js"
+}
+
+// =====================================================
+// Configuración de la Base de Datos
+// =====================================================
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// =====================================================
+// Modelo: User (Usuario)
+// =====================================================
+model User {
+  // Campos básicos
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String   // Hash con bcrypt
+  name      String
+  
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relaciones
+  posts     Post[]   // Un usuario puede tener muchas publicaciones
+  
+  @@map("users") // Nombre de la tabla en la base de datos
+}
+
+// =====================================================
+// Modelo: Post (Publicación)
+// =====================================================
+model Post {
+  // Campos básicos
+  id        String   @id @default(uuid())
+  content   String   @db.Text // Permite textos largos
+  
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relaciones
+  userId    String   // Foreign key
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("posts") // Nombre de la tabla en la base de datos
+  @@index([userId]) // Índice para búsquedas eficientes
+}
+
+// =====================================================
+// NOTAS SOBRE EL ESQUEMA
+// =====================================================
+// 1. @id @default(uuid())
+//    - Genera IDs únicos automáticamente (ej: "a1b2c3-d4e5...")
+//    - Alternativa: @default(autoincrement()) para IDs numéricos
+//
+// 2. @unique
+//    - Asegura que no haya emails duplicados
+//
+// 3. @default(now())
+//    - Automáticamente guarda la fecha/hora actual al crear
+//
+// 4. @updatedAt
+//    - Se actualiza automáticamente cada vez que se modifica el registro
+//
+// 5. @db.Text
+//    - Permite textos ilimitados (vs String que tiene límite)
+//
+// 6. @relation
+//    - Define relaciones entre tablas
+//    - fields: campo local que guarda la referencia
+//    - references: campo en la tabla relacionada
+//    - onDelete: Cascade = si se elimina el usuario, se eliminan sus posts
+//
+// 7. @@map("nombre_tabla")
+//    - Cambia el nombre de la tabla en la BD
+//    - Por convención, usamos snake_case para tablas
+//
+// 8. @@index([campo])
+//    - Crea un índice para búsquedas más rápidas
+
+// =====================================================
+// COMANDOS ÚTILES
+// =====================================================
+// Generar cliente Prisma:
+//   npx prisma generate
+//
+// Crear migración:
+//   npx prisma migrate dev --name nombre_descriptivo
+//
+// Aplicar migraciones:
+//   npx prisma migrate deploy
+//
+// Resetear base de datos:
+//   npx prisma migrate reset
+//
+// Abrir Prisma Studio (interfaz visual):
+//   npx prisma studio
+//
+// Ejecutar seeder:
+//   npx prisma db seed
