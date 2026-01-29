@@ -9,7 +9,7 @@ import { AppService } from "./app.service";
 import { PrismaModule } from "./prisma/prisma.module";
 import { AuthModule } from "./auth/auth.module";
 import { PostsModule } from "./posts/posts.module";
-//import { UsersModule } from "./users/users.module";
+import { UsersModule } from "./users/users.module";
 
 /**
  * AppModule - Módulo raíz de NestJS
@@ -23,7 +23,7 @@ import { PostsModule } from "./posts/posts.module";
     // Módulos de funcionalidad
     AuthModule,
     PostsModule,
-    // UsersModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
