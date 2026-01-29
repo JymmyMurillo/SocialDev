@@ -26,6 +26,49 @@ services:
       timeout: 5s
       retries: 5
 
+# =====================================================
+  # Backend API (NestJS)
+  # =====================================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: socialdev-backend
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    environment:
+      # URL de conexión a PostgreSQL
+      DATABASE_URL: postgresql://${DB_USER:-socialdev}:${DB_PASSWORD:-socialdev123}@db:5432/${DB_NAME:-socialdev_db}?schema=public
+      # Secreto para JWT
+      JWT_SECRET: ${JWT_SECRET:-super-secret-key-change-in-production}
+      # Puerto del servidor
+      PORT: 3000
+      # Entorno
+      NODE_ENV: development
+    volumes:
+      # Sincroniza solo el código fuente para desarrollo
+      - ./backend/src:/app/src
+      - ./backend/prisma:/app/prisma
+      - ./backend/package.json:/app/package.json
+      - ./backend/package-lock.json:/app/package-lock.json
+      - ./backend/tsconfig.json:/app/tsconfig.json
+      - ./backend/nest-cli.json:/app/nest-cli.json
+      - /app/node_modules
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - socialdev-network
+    command: >
+      sh -c "
+        echo '⏳ Esperando a que PostgreSQL esté listo...' &&
+        npx prisma generate &&
+        npx prisma migrate deploy &&
+        echo '✅ Base de datos inicializada' &&
+        npm run start:dev
+      "
+
 volumes:
   postgres_data:
 

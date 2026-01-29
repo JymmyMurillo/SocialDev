@@ -4,15 +4,22 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "nest build",
+    "start": "node dist/main",
+    "start:dev": "nest start --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "prisma": {
-    "seed": "ts-node prisma/seed.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  },
   "dependencies": {
     "@nestjs/common": "^11.1.12",
     "@nestjs/core": "^11.1.12",

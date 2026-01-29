@@ -22,7 +22,7 @@ COPY prisma ./prisma/
 
 # Instalar dependencias
 # --frozen-lockfile asegura que se usen las versiones exactas
-RUN npm ci --only=production && \
+RUN npm ci && \
     npm cache clean --force
 
 # Copiar el resto del código fuente
