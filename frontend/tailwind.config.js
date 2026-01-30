@@ -34,6 +34,10 @@ export default {
           lighter: "#4A5568",
           light: "#718096",
         },
+        /* === Necesarios para @apply border-border === */
+        border: "hsl(var(--border))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
       },
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
