@@ -80,3 +80,14 @@ export interface PostsState {
   createPost: (data: CreatePostData) => Promise<void>;
   deletePost: (id: string) => Promise<void>;
 }
+
+/**
+ * Error de la API
+ */
+export interface ApiError {
+  response?: {
+    data?: {
+      message?: string;
+    };
+  };
+}
