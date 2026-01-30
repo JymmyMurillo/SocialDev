@@ -91,7 +91,7 @@
   }
 
   .card-hover {
-    @apply hover: shadow-lg transition-shadow duration-200;
+    @apply hover:shadow-lg transition-shadow duration-200;
   }
 
   /* Contenedor principal */

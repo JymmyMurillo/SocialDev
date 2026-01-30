@@ -5,7 +5,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuthStore } from './store/authStore';
 import LoginPage from './pages/LoginPage';
-//import HomePage from './pages/HomePage';
+import HomePage from './pages/HomePage';
 
 /**
  * Componente de ruta protegida
@@ -35,7 +35,7 @@ function App() {
 
         <Route
           path="/"
-          element={<ProtectedRoute> <>hola</> {/*<HomePage />*/}</ProtectedRoute>}
+          element={<ProtectedRoute> <HomePage /> </ProtectedRoute>}
         />
 
         {/* Ruta por defecto: redirigir a / */}
