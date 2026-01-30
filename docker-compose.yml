@@ -10,7 +10,7 @@ services:
     container_name: socialdev-db
     restart: unless-stopped
     ports:
-      - '5432:5432'
+      - "5432:5432"
     environment:
       POSTGRES_USER: ${DB_USER:-socialdev}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-socialdev123}
@@ -21,12 +21,12 @@ services:
     networks:
       - socialdev-network
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U socialdev']
+      test: ["CMD-SHELL", "pg_isready -U socialdev"]
       interval: 10s
       timeout: 5s
       retries: 5
 
-# =====================================================
+  # =====================================================
   # Backend API (NestJS)
   # =====================================================
   backend:
@@ -36,7 +36,7 @@ services:
     container_name: socialdev-backend
     restart: unless-stopped
     ports:
-      - '3000:3000'
+      - "3000:3000"
     environment:
       # URL de conexión a PostgreSQL
       DATABASE_URL: postgresql://${DB_USER:-socialdev}:${DB_PASSWORD:-socialdev123}@db:5432/${DB_NAME:-socialdev_db}?schema=public
@@ -69,8 +69,41 @@ services:
         npm run start:dev
       "
 
+  # =====================================================
+  # Frontend (React + Vite)
+  # =====================================================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: socialdev-frontend
+    restart: unless-stopped
+    ports:
+      - "5173:5173"
+    environment:
+      # URL del backend
+      VITE_API_URL: http://localhost:3000
+    volumes:
+      # Sincroniza el código para hot-reload en desarrollo
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+    depends_on:
+      - backend
+    networks:
+      - socialdev-network
+    stdin_open: true
+    tty: true
+
+# =====================================================
+# Volumes - Para persistir datos
+# =====================================================
+
 volumes:
   postgres_data:
+
+# =====================================================
+# Networks - Para comunicación entre servicios
+# =====================================================
 
 networks:
   socialdev-network:

@@ -1,0 +1,43 @@
+# =====================================================
+# Docker Ignore - Backend
+# =====================================================
+# Archivos y carpetas que NO se copian a la imagen Docker
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+dist/
+build/
+coverage/
+
+# Tests
+test/
+**/*.spec.ts
+**/*.test.ts
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Documentation
+README.md
+docs/
