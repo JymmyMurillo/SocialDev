@@ -34,7 +34,7 @@ function HomePage() {
           </h2>
 
           {/* Estado de carga */}
-          {!loading && <Loading message="Cargando publicaciones..." />}
+          {loading && <Loading message="Cargando publicaciones..." />}
 
           {/* Estado de error */}
           {error && (
