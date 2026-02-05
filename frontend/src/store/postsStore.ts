@@ -31,9 +31,10 @@ export const usePostsStore = create<PostsState>((set) => ({
       });
     } catch (error) {
       const apiError = error as ApiError;
-      const message = error instanceof Error 
-        ? error.message 
-        : apiError.response?.data?.message || "Error al cargar publicaciones";
+      const message =
+        error instanceof Error
+          ? error.message
+          : apiError.response?.data?.message || "Error al cargar publicaciones";
       set({
         error: message,
         loading: false,
@@ -54,9 +55,31 @@ export const usePostsStore = create<PostsState>((set) => ({
       }));
     } catch (error) {
       const apiError = error as ApiError;
-      const message = error instanceof Error 
-        ? error.message 
-        : apiError.response?.data?.message || "Error al crear publicación";
+      const message =
+        error instanceof Error
+          ? error.message
+          : apiError.response?.data?.message || "Error al crear publicación";
+      throw new Error(message);
+    }
+  },
+
+  /**
+   * Actualizar una publicación existente
+   */
+  updatePost: async (id: string, data: CreatePostData) => {
+    try {
+      const updatedPost = await api.updatePost(id, data);
+
+      // Actualizar el post en la lista
+      set((state) => ({
+        posts: state.posts.map((post) => (post.id === id ? updatedPost : post)),
+      }));
+    } catch (error) {
+      const apiError = error as ApiError;
+      const message =
+        error instanceof Error
+          ? error.message
+          : apiError.response?.data?.message || "Error al actualizar publicación";
       throw new Error(message);
     }
   },
@@ -74,9 +97,10 @@ export const usePostsStore = create<PostsState>((set) => ({
       }));
     } catch (error) {
       const apiError = error as ApiError;
-      const message = error instanceof Error 
-        ? error.message 
-        : apiError.response?.data?.message || "Error al eliminar publicación";
+      const message =
+        error instanceof Error
+          ? error.message
+          : apiError.response?.data?.message || "Error al eliminar publicación";
       throw new Error(message);
     }
   },
