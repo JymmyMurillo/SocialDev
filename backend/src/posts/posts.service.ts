@@ -9,6 +9,7 @@ import {
 } from "@nestjs/common";
 import { PrismaService } from "../prisma/prisma.service";
 import { CreatePostDto } from "./dto/create-post.dto";
+import { UpdatePostDto } from "./dto/update-post.dto";
 
 /**
  * PostsService - Maneja la lógica de negocio de publicaciones
@@ -43,6 +44,31 @@ export class PostsService {
     });
 
     return post;
+  }
+
+
+  /**   * Actualizar una publicación existente
+   *
+   * @param id - ID de la publicación a actualizar  
+   * @param updatePostDto - Datos para actualizar la publicación
+   * @returns Publicación actualizada
+   * @throws NotFoundException si la publicación no existe
+   */
+  
+  async update(id: string, updatePostDto: UpdatePostDto) {
+    // Verificar que el post existe
+    const existingPost = await this.prisma.post.findUnique({
+      where: { id }
+    });
+    if (!existingPost) {
+      throw new NotFoundException(`Publicación con ID ${id} no encontrada`);
+    }
+    // Actualizar el post
+    const updatedPost = await this.prisma.post.update({
+      where: { id },
+      data: updatePostDto,
+    });
+    return updatedPost;
   }
 
   /**

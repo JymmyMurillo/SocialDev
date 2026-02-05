@@ -21,6 +21,7 @@ import {
 } from "@nestjs/swagger";
 import { PostsService } from "./posts.service";
 import { CreatePostDto } from "./dto/create-post.dto";
+import { UpdatePostDto } from "./dto/update-post.dto";
 import { PostEntity } from "./entities/post.entity";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
 import { GetUser } from "../common/decorators/get-user.decorator";
@@ -66,6 +67,34 @@ export class PostsController {
     @Body() createPostDto: CreatePostDto,
   ) {
     return this.postsService.create(userId, createPostDto);
+  }
+
+  /**   * POST /api/posts/:id
+   * Actualizar una publicación existente
+   */
+  @Post(":id")
+  @ApiOperation({
+    summary: "Actualizar publicación",  
+    description: "Actualiza los detalles de una publicación existente",
+  })
+  @ApiResponse({
+    status: 200,
+    description: "Publicación actualizada exitosamente",
+    type: PostEntity,
+  })
+  @ApiResponse({
+    status: 404,
+    description: "Publicación no encontrada",
+  })
+  @ApiResponse({
+    status: 401,
+    description: "No autenticado",
+  })
+  update(
+    @Param("id") id: string,
+    @Body() updatePostDto: UpdatePostDto,
+  ) {
+    return this.postsService.update(id, updatePostDto);
   }
 
   /**
