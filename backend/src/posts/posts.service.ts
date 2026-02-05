@@ -46,27 +46,45 @@ export class PostsService {
     return post;
   }
 
-
   /**   * Actualizar una publicación existente
    *
-   * @param id - ID de la publicación a actualizar  
+   * @param id - ID de la publicación a actualizar
+   * @param userId - ID del usuario que intenta editar
    * @param updatePostDto - Datos para actualizar la publicación
    * @returns Publicación actualizada
    * @throws NotFoundException si la publicación no existe
+   * @throws ForbiddenException si el usuario no es el autor
    */
-  
-  async update(id: string, updatePostDto: UpdatePostDto) {
+
+  async update(id: string, userId: string, updatePostDto: UpdatePostDto) {
     // Verificar que el post existe
     const existingPost = await this.prisma.post.findUnique({
-      where: { id }
+      where: { id },
     });
     if (!existingPost) {
       throw new NotFoundException(`Publicación con ID ${id} no encontrada`);
     }
+
+        // Verificar que el usuario es el autor
+    if (existingPost.userId !== userId) {
+      throw new ForbiddenException('No tienes permiso para editar esta publicación');
+    }
+
     // Actualizar el post
     const updatedPost = await this.prisma.post.update({
       where: { id },
-      data: updatePostDto,
+      data: {
+        content: updatePostDto.content,
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
     });
     return updatedPost;
   }
