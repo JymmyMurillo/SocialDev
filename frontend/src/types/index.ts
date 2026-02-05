@@ -78,6 +78,7 @@ export interface PostsState {
   error: string | null;
   fetchPosts: () => Promise<void>;
   createPost: (data: CreatePostData) => Promise<void>;
+  updatePost: (id: string, data: CreatePostData) => Promise<void>;
   deletePost: (id: string) => Promise<void>;
 }
 

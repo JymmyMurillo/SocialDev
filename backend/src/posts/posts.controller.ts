@@ -12,6 +12,7 @@ import {
   UseGuards,
   HttpCode,
   HttpStatus,
+  Patch,
 } from "@nestjs/common";
 import {
   ApiTags,
@@ -69,13 +70,14 @@ export class PostsController {
     return this.postsService.create(userId, createPostDto);
   }
 
-  /**   * POST /api/posts/:id
-   * Actualizar una publicación existente
+  /**   * PATCH /api/posts/:id
+   * Actualizar una publicación existente (solo el autor puede hacerlo)
    */
-  @Post(":id")
+  @Patch(":id")
   @ApiOperation({
-    summary: "Actualizar publicación",  
-    description: "Actualiza los detalles de una publicación existente",
+    summary: "Actualizar publicación",
+    description:
+      "Actualiza los detalles de una publicación existente. Solo el autor puede editar su publicación.",
   })
   @ApiResponse({
     status: 200,
@@ -87,14 +89,23 @@ export class PostsController {
     description: "Publicación no encontrada",
   })
   @ApiResponse({
+    status: 403,
+    description: "Sin permiso para editar esta publicación",
+  })
+  @ApiResponse({
+    status: 400,
+    description: "Datos inválidos",
+  })
+  @ApiResponse({
     status: 401,
     description: "No autenticado",
   })
   update(
     @Param("id") id: string,
+    @GetUser("id") userId: string,
     @Body() updatePostDto: UpdatePostDto,
   ) {
-    return this.postsService.update(id, updatePostDto);
+    return this.postsService.update(id, userId, updatePostDto);
   }
 
   /**

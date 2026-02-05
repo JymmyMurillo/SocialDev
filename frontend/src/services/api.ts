@@ -106,6 +106,14 @@ export const createPost = async (data: CreatePostData): Promise<Post> => {
 };
 
 /**
+ * Actualizar una publicación existente
+ */
+export const updatePost = async (id: string, data: CreatePostData): Promise<Post> => {
+  const response = await api.patch<Post>(`/posts/${id}`, data);
+  return response.data;
+};
+
+/**
  * Eliminar una publicación
  */
 export const deletePost = async (id: string): Promise<void> => {
